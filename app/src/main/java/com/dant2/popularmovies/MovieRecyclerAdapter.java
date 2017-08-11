@@ -47,8 +47,11 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
         ImageView imageView = holder.mMoviePic;
         TextView ratingText = holder.mMovieRating;
         TextView nameText = holder.mMovieName;
+        TextView summaryText = holder.mMovieDesc;
+        TextView releaseText = holder.mMovieRelease;
         Picasso.with(imageView.getContext()).load("http://image.tmdb.org/t/p/w185/" + current.getPoster()).into(imageView);
         nameText.setText(current.getName());
+
 
 
 
@@ -64,10 +67,14 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
         TextView mMovieName;
         TextView mMovieDesc;
         TextView mMovieRating;
+        TextView mMovieRelease;
         public MovieViewHolder(View v){
             super(v);
             mMoviePic = v.findViewById(R.id.iv_movie_image);
             mMovieName = v.findViewById(R.id.tv_movie_name);
+            mMovieDesc = v.findViewById(R.id.tv_detail_summary);
+            mMovieRating = v.findViewById(R.id.tv_detail_rating);
+            mMovieRelease = v.findViewById(R.id.tv_detail_release_date);
             v.setOnClickListener(this);
         }
 

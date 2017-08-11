@@ -30,17 +30,17 @@ public class Movie {
         this.plotSummary = plotSummary;
     }
 
-    public int getRating() {
+    public String getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(String rating) {
         this.rating = rating;
     }
 
     String name;
 
-    public Movie(String name, String releaseDate, String plotSummary, int rating, String poster) {
+    public Movie(String name, String releaseDate, String plotSummary, String rating, String poster) {
         this.name = name;
         this.releaseDate = releaseDate;
         this.plotSummary = plotSummary;
@@ -50,7 +50,7 @@ public class Movie {
 
     String releaseDate;
     String plotSummary;
-    int rating;
+    String rating;
 
     public String getPoster() {
         return poster;

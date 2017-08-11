@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerAdap
         showDetails.putExtra("MOVIE_NAME", movieItem.getName());
         showDetails.putExtra("MOVIE_SUMMARY",movieItem.getPlotSummary() );
         showDetails.putExtra("MOVIE_IMAGE", movieItem.getPoster());
+        showDetails.putExtra("MOVIE_RATING", movieItem.getRating());
+        showDetails.putExtra("MOVIE_RELEASE_DATE", movieItem.getReleaseDate());
         startActivity(showDetails);
     }
     private void switchSort(){
