@@ -11,6 +11,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerAdap
     private RecyclerView moviesView;
     private MovieRecyclerAdapter movieAdapter;
     private ArrayList<Movie> listOfMovies = new ArrayList<Movie>();
-
+    private Boolean popularSort = true;
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -46,6 +48,24 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerAdap
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_sort:
+                switchSort();
+                return true;
+            default:
+                return true;
+        }
+
+    }
+
+    @Override
     public void onListItemClick(int clickedItemIndex) {
         Movie movieItem = listOfMovies.get(clickedItemIndex);
         Intent showDetails = new Intent(MainActivity.this, DetailActivity.class);
@@ -54,14 +74,26 @@ public class MainActivity extends AppCompatActivity implements MovieRecyclerAdap
         showDetails.putExtra("MOVIE_IMAGE", movieItem.getPoster());
         startActivity(showDetails);
     }
+    private void switchSort(){
+        if(popularSort){
+            popularSort = false;
+        }
+        else if(!popularSort){
+            popularSort = true;
+        }
+        if(isOnline()) {
 
+            loadMoviesFromWebTask loadMovies = new loadMoviesFromWebTask();
+            loadMovies.execute();
+        }
+    }
 
-    private class loadMoviesFromWebTask extends AsyncTask<Void, Void, ArrayList<Movie>>{
+    private class loadMoviesFromWebTask extends AsyncTask<Boolean, Void, ArrayList<Movie>>{
 
         @Override
-        protected ArrayList<Movie> doInBackground(Void... voids) {
+        protected ArrayList<Movie> doInBackground(Boolean... bools) {
             Log.v("doInBackground", "Attempting to download movies");
-            String movies = Utilities.downloadMoviesAsJson();
+            String movies = Utilities.downloadMoviesAsJson(popularSort);
             Log.v("doInBackground", "Attempting to parse movies from JSON");
             ArrayList<Movie> arrayOfMovies = Utilities.parseMoviesFromJSON(movies);
             Log.v("doInBackground","Parsed Movies from Json");
