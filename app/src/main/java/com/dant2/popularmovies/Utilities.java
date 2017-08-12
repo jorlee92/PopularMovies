@@ -23,13 +23,13 @@ public class Utilities {
     private final static String API_KEY = "REMOVED";
     private static URL fullMoviesURL = null;
     private static HttpURLConnection connection = null;
-    public static String downloadMoviesAsJson(boolean popSorted){
+
+    public static String downloadMoviesAsJson(boolean popSorted) {
         String listOfMovies = null;
         try {
-            if(popSorted){
+            if (popSorted) {
                 fullMoviesURL = new URL("https://api.themoviedb.org/3/movie/popular?api_key=" + API_KEY + "&language=en-US&page=1");
-            }
-            else{
+            } else {
                 fullMoviesURL = new URL("https://api.themoviedb.org/3/movie/top_rated?api_key=" + API_KEY + "&language=en-US&page=1");
             }
 
@@ -38,7 +38,7 @@ public class Utilities {
             Log.v("MalformedURLException", e.toString());
 
         }
-        if (fullMoviesURL != null){
+        if (fullMoviesURL != null) {
 
             try {
 
@@ -50,20 +50,18 @@ public class Utilities {
             }
 
         }
-        if( connection != null){
+        if (connection != null) {
             Log.v("Utilities", "Made connection");
             InputStream moviesResponse;
             try {
                 moviesResponse = connection.getInputStream();
                 listOfMovies = inputStreamToString(moviesResponse);
 
-            }
-            catch ( IOException e){
+            } catch (IOException e) {
                 Log.v("IOException", e.toString());
             }
 
-        }
-        else{
+        } else {
             Log.v("Utilities", "Failed to open connection");
         }
 
@@ -73,12 +71,12 @@ public class Utilities {
     private static String inputStreamToString(InputStream inputStream) throws IOException {
 
         StringBuilder resultString = new StringBuilder();
-        if(inputStream != null){
+        if (inputStream != null) {
 
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
             BufferedReader inputReader = new BufferedReader(inputStreamReader);
             String line = inputReader.readLine();
-            while(line != null){
+            while (line != null) {
 
                 resultString.append(line);
                 line = inputReader.readLine();
@@ -91,7 +89,7 @@ public class Utilities {
         return resultString.toString();
     }
 
-    public static ArrayList<Movie> parseMoviesFromJSON(String jsonString){
+    public static ArrayList<Movie> parseMoviesFromJSON(String jsonString) {
         JSONObject fullMovies;
         JSONArray individualMovies;
         ArrayList<Movie> movieArrayList = new ArrayList<Movie>();
@@ -99,7 +97,7 @@ public class Utilities {
             fullMovies = new JSONObject(jsonString);
             individualMovies = fullMovies.getJSONArray("results");
 
-            for(int i = 0; i < individualMovies.length(); i++){
+            for (int i = 0; i < individualMovies.length(); i++) {
                 JSONObject currentMovie = individualMovies.getJSONObject(i);
                 String name = currentMovie.getString("title");
                 String releaseDate = currentMovie.getString("release_date");
@@ -107,7 +105,7 @@ public class Utilities {
                 String rating = currentMovie.optString("vote_average", "none");
                 String posterURL = currentMovie.getString("poster_path");
                 Log.v("parseMoviesFromJSON", posterURL);
-                movieArrayList.add(i,new Movie(name, releaseDate, plotSummary,rating, posterURL));
+                movieArrayList.add(i, new Movie(name, releaseDate, plotSummary, rating, posterURL));
             }
         } catch (JSONException e) {
             Log.v("parseMoviesFromJSON", "failed to create JSON object");
@@ -116,9 +114,6 @@ public class Utilities {
         return movieArrayList;
 
     }
-
-
-
 
 
 }
